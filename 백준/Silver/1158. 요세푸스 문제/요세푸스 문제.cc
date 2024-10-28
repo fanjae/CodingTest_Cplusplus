@@ -5,7 +5,7 @@ using namespace std;
 int main(void)
 {
 	int n, k;
-	int cnt = 0;
+	int cnt = 1;
 	list <int> josephus;
 	list <int>::iterator iter;
 
@@ -19,18 +19,16 @@ int main(void)
 	}
 
 	iter = josephus.begin();
-	cnt = k;
-	for (int i = 0; i < k-1; i++)
-	{
-		iter++;	
-	}
 	
-	cout << "<";
 	while (!josephus.empty())
 	{
 		if (cnt == k)
 		{
 			cnt = 1;
+			if (josephus.size() == n)
+			{
+				cout << "<";
+			}
 			if (josephus.size() > 1) // 1개 이상인 경우 출력할 값이 더있음.
 			{
 				cout << *iter << ", ";
