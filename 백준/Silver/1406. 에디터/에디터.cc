@@ -6,8 +6,13 @@ list<char> editor;
 list<char>::iterator cursor;
 int main(void)
 {
+	ios::sync_with_stdio(0);
+	cin.tie(0);
+	
 	string data;
 	int command;
+
+
 	cin >> data;
 	for (int i = 0; i < data.length(); i++)
 	{
@@ -36,7 +41,6 @@ int main(void)
 		}
 		else if (op == 'B')
 		{
-			
 			if (cursor != editor.begin())
 			{
 				cursor--;
