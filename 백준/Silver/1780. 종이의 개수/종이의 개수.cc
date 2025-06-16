@@ -1,58 +1,56 @@
 #include <iostream>
 using namespace std;
-int paper[2500][2500];
-int minus_paper_cnt = 0;
-int zero_paper_cnt = 0;
-int one_paper_cnt = 0;
-void first_init()
+int paper_num[3]; // minus, zero, one;
+int paper[2187][2187] = { 0 }; // paper
+void paper_cut(int n, int x, int y)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-}
-void paper_cutting(int x, int y, int size)
-{
-	int pivot = paper[x][y];
-	bool paper_same = true;
-	for (int i = x; i < x + size; i++) // 그대로 사용 가능한 종이인가 검사
+	if (n == 1)
 	{
-		for (int j = y; j < y + size; j++)
-		{
-			if (pivot != paper[i][j]) paper_same = false;
-		}
-	}
-
-	if (paper_same == true) // 하나의 종이인 경우.
-	{
-		if (paper[x][y] == -1) minus_paper_cnt++;
-		else if (paper[x][y] == 0) zero_paper_cnt++;
-		else if (paper[x][y] == 1) one_paper_cnt++;
+		paper_num[paper[x][y] + 1]++;
+		return ;
 	}
 	else
 	{
-		int cut_size = size / 3; 
+		bool same = true;
+		int set_paper = paper[x][y];
+		int cut_size = n / 3;
+		int sum = 0;
+		for (int i = x; i < x + n; i++)
+		{
+			for (int j = y; j < y + n; j++)
+			{
+				if (set_paper != paper[i][j])
+				{
+					same = false;
+					break;
+				}
+			}
+		}
+		
+		if (same) paper_num[set_paper + 1]++; // 모두가 동일한 종이면 하나의 종이.
+		else // 아니라면 쪼개서 판단
+		{
+			paper_cut(cut_size, x, y);
+			paper_cut(cut_size, x, y + cut_size);
+			paper_cut(cut_size, x, y + cut_size * 2);
 
-		// 1행 ~ 3행
-		paper_cutting(x, y, cut_size);
-		paper_cutting(x, y + cut_size, cut_size);
-		paper_cutting(x, y + cut_size * 2, cut_size);
+			paper_cut(cut_size, x + cut_size, y);
+			paper_cut(cut_size, x + cut_size, y + cut_size);
+			paper_cut(cut_size, x + cut_size, y + cut_size * 2);
 
-		// 4행 ~ 6행
-		paper_cutting(x + cut_size, y, cut_size);
-		paper_cutting(x + cut_size, y + cut_size, cut_size);
-		paper_cutting(x + cut_size, y + cut_size * 2, cut_size);
-
-		// 7행 ~ 9행
-		paper_cutting(x + cut_size * 2, y, cut_size);
-		paper_cutting(x + cut_size * 2, y + cut_size, cut_size);
-		paper_cutting(x + cut_size * 2, y + cut_size * 2, cut_size);
+			paper_cut(cut_size, x + cut_size * 2, y);
+			paper_cut(cut_size, x + cut_size * 2, y + cut_size);
+			paper_cut(cut_size, x + cut_size * 2, y + cut_size * 2);
+		}
 	}
-	return;
 }
 int main(void)
 {
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
 	int n;
-	first_init();
 	cin >> n;
 	for (int i = 0; i < n; i++)
 	{
@@ -61,8 +59,10 @@ int main(void)
 			cin >> paper[i][j];
 		}
 	}
-	paper_cutting(0, 0, n);
-	cout << minus_paper_cnt << "\n";
-	cout << zero_paper_cnt << "\n";
-	cout << one_paper_cnt << "\n";
+	paper_cut(n, 0, 0);
+	for (int i = 0; i <= 2; i++)
+	{
+		cout << paper_num[i] << "\n";
+	}
+
 }
