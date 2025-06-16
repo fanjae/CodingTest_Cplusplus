@@ -1,53 +1,49 @@
 #include <iostream>
 using namespace std;
 int paper[129][129];
-int n;
-int white_paper_cnt = 0;
-int blue_paper_cnt = 0;
-void first_init()
+int number[2];
+void paper_cut(int n, int x, int y)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cout.tie(NULL);
-}
-void paper_cutting(int x, int y, int size)
-{
-	int pivot = paper[x][y];
-	bool same_number = true; // 서로 같은 종이인가 체크
-	for (int i = x; i < x + size; i++)
+	if (n == 1) // 1개의 색종이가 된 경우
 	{
-		for (int j = y; j < y + size; j++)
-		{
-			if (pivot != paper[i][j])
-			{
-				same_number = false;
-				break;
-			}
-		}
-	}
-	if (same_number == true)
-	{
-		if (paper[x][y] == 0) white_paper_cnt++;
-		else if (paper[x][y] == 1) blue_paper_cnt++;
+		number[paper[x][y]]++;
 	}
 	else
 	{
-		int cutting_size = size / 2;
+		int sum = 0;
+		int cut_size = n / 2;
 
-		// 정사각형 4개로 쪼갰을때 윗 2개
-		paper_cutting(x, y, cutting_size);
-		paper_cutting(x, y + cutting_size, cutting_size);
-
-		// 정사각형 4개로 쪼갰을때 아랫 2개
-		paper_cutting(x + cutting_size, y, cutting_size);
-		paper_cutting(x + cutting_size, y + cutting_size, cutting_size);
+		// 종이의 합을 구함.
+		for (int i = x; i < x + n; i++)
+		{
+			for (int j = y; j < y + n; j++)
+			{
+				sum += paper[i][j];
+			}
+		}
+		if (sum == 0 || sum == n * n) // 하나의 색종이가 존재
+		{
+			number[paper[x][y]]++;
+		}
+		else // 하나의 색종이가 아니면 색종이 분할.
+		{
+			paper_cut(cut_size, x, y);
+			paper_cut(cut_size, x, y + cut_size);
+			paper_cut(cut_size, x + cut_size, y);
+			paper_cut(cut_size, x + cut_size, y + cut_size);
+		}
 	}
-	return ;
+
 }
 int main(void)
 {
-	first_init();
+	std::ios_base::sync_with_stdio(false);
+	std::cin.tie(NULL);
+	std::cout.tie(NULL);
+
+	int n;
 	cin >> n;
+
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < n; j++)
@@ -55,8 +51,10 @@ int main(void)
 			cin >> paper[i][j];
 		}
 	}
+	paper_cut(n, 0, 0);
 
-	paper_cutting(0, 0, n);
-	cout << white_paper_cnt << "\n";
-	cout << blue_paper_cnt << "\n";
+	for (int i = 0; i < 2; i++)
+	{
+		cout << number[i] << "\n";
+	}
 }
