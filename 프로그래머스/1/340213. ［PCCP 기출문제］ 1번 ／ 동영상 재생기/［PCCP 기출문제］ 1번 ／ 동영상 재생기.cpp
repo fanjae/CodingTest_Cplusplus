@@ -10,7 +10,7 @@ string int_to_string_time_cal(int target)
     int min = target / 60;
     int sec = target % 60;
     
-    if(min <= 9)
+    if(min <= 9) // 9 이하면 앞에 0 붙여서 출력 
     {
         temp = "0" + to_string(min);
     }
@@ -20,7 +20,7 @@ string int_to_string_time_cal(int target)
     }
     
     temp += ":";
-    if(sec <= 9)
+    if(sec <= 9) // 9 이하면 앞에 0 붙여서 출력 
     {
         temp += "0" + to_string(sec);
     }
@@ -36,8 +36,8 @@ int string_to_int_time_cal(string target)
 {
     string temp = target.substr(0,2);
     string temp2 = target.substr(3);
-    int min = (temp[0] - '0') * 10 + (temp[1] - '0');
-    int sec = (temp2[0] - '0') * 10 + (temp2[1] - '0');
+    int min = (temp[0] - '0') * 10 + (temp[1] - '0'); // 분 추출
+    int sec = (temp2[0] - '0') * 10 + (temp2[1] - '0'); // 초 추출
     
     return min * 60 + sec;
 }
@@ -50,6 +50,7 @@ string solution(string video_len, string pos, string op_start, string op_end, ve
     int op_start_sec = string_to_int_time_cal(op_start);
     int op_end_sec = string_to_int_time_cal(op_end);
     int pos_sec = string_to_int_time_cal(pos);
+    
     if(pos_sec >= op_start_sec && pos_sec <= op_end_sec)
     {
         pos_sec = op_end_sec;
@@ -57,10 +58,10 @@ string solution(string video_len, string pos, string op_start, string op_end, ve
     
     for(int i=0; i<commands.size(); i++)
     {
-        if(commands[i] == "prev")
+        if(commands[i] == "prev") 
         {
             pos_sec = pos_sec - 10;
-            if(pos_sec < 10)
+            if(pos_sec < 0) 
             {
                 pos_sec = 0;
             }
@@ -68,7 +69,7 @@ string solution(string video_len, string pos, string op_start, string op_end, ve
         else if(commands[i] == "next")
         {
             pos_sec = pos_sec + 10;
-            if(pos_sec > video_sec)
+            if(pos_sec > video_sec) // 동영상의 남은 시간이 10초 미만일 때, next 한 경우 마지막 위치로 이동
             {
                 pos_sec = video_sec;
             }
