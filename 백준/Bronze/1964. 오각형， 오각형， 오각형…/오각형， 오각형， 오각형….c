@@ -1,0 +1,1 @@
+main(){long long a;scanf("%lld",&a);printf("%lld",((3*a+2)*(a+1)/2)%45678);}  

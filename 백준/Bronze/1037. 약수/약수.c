@@ -1,0 +1,1 @@
+main(){int n,max=2,min=1000005,su,count=0;scanf("%d",&n);for(int i=0; i<n; i++){scanf("%d",&su);if(su < min)min=su;if(su > max)max = su;}printf("%d\n",min*max);}

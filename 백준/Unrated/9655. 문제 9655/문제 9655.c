@@ -1,0 +1,1 @@
+main(n){scanf("%d",&n);printf("%s",n%2?"SK":"CY");}
